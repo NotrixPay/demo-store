@@ -8,21 +8,21 @@ import type { Product } from "../utils/types";
 export const CartItem = ({
   name,
   description,
-  id,
-  image,
+  uuid,
+  imageURL,
   price,
   quantity,
 }: Product) => {
   const { count, add, remove, isInCart } = useCartStore();
-  const product = { id, name, price, image, quantity } as Product;
+  const product = { uuid, name, price, imageURL, quantity } as Product;
   return (
     <div className="card w-80 bg-base-100 shadow-xl">
-      <figure className="w-full"><img className="w-full max-h-[250px]" src={image} alt={name} /></figure>
+      <figure className="w-full"><img className="w-full max-h-[250px]" src={imageURL} alt={name} /></figure>
       <div className="card-body">
         <h2 className="card-title">{name}</h2>
         <p>{description}</p>
         <div className="card-actions justify-end">
-          {isInCart(id) ? (
+          {isInCart(uuid) ? (
             <div className="flex items-center gap-2">
               <p className="text-success">Added to cart</p>
               <FaCheckCircle className="icon" size="26px" color="#00ca92" />

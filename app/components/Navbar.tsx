@@ -49,7 +49,7 @@ export const Navbar = () => {
                         <div className="flex gap-2 justify-between ">
                           <div className="flex gap-2">
                             <img
-                              src={item.image}
+                              src={item.imageURL}
                               className="max-h-10 max-w-10 rounded-xl"
                               alt={item.name}
                             />
@@ -58,7 +58,7 @@ export const Navbar = () => {
                             <p>{item.name}</p>
 
                             <p className="font-light">${item.price}</p>
-                            <CiTrash onClick={() => remove(item.id)} />
+                            <CiTrash onClick={() => remove(item.uuid)} />
                           </div>
                         </div>
                       </li>

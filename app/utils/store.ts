@@ -9,8 +9,8 @@ type CartStore = {
   count: () => number;
   total: () => number;
   add: (product: Product) => void;
-  isInCart: (productId: number) => boolean;
-  remove: (idProduct: number) => void;
+  isInCart: (productId: string) => boolean;
+  remove: (idProduct: string) => void;
   removeAll: () => void;
 };
 // interface Store {
@@ -35,9 +35,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
     const updatedCart = updateCart(product, cart);
     set({ cart: updatedCart });
   },
-  isInCart: (productId: number) => {
+  isInCart: (productId: string) => {
     const { cart } = get();
-    return cart.some((item) => item.id === productId);
+    return cart.some((item) => item.uuid === productId);
   },
   total: () => {
     const { cart } = get();
@@ -47,7 +47,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
         .reduce((prev, curr) => prev + curr);
     return 0;
   },
-  remove: (idProduct: number) => {
+  remove: (idProduct: string) => {
     const { cart } = get();
     const updatedCart = removeCart(idProduct, cart);
     set({ cart: updatedCart });
@@ -58,12 +58,12 @@ export const useCartStore = create<CartStore>((set, get) => ({
 function updateCart(product: Product, cart: CartItem[]): CartItem[] {
   const cartItem = { ...product, count: 1 } as CartItem;
 
-  const productOnCart = cart.map((item) => item.id).includes(product.id);
+  const productOnCart = cart.map((item) => item.uuid).includes(product.uuid);
 
   if (!productOnCart) cart.push(cartItem);
   else {
     return cart.map((item) => {
-      if (item.id === product.id)
+      if (item.uuid === product.uuid)
         return { ...item, count: item.count + 1 } as CartItem;
       return item;
     });
@@ -72,10 +72,10 @@ function updateCart(product: Product, cart: CartItem[]): CartItem[] {
   return cart;
 }
 
-function removeCart(idProduct: number, cart: CartItem[]): CartItem[] {
+function removeCart(idProduct: string, cart: CartItem[]): CartItem[] {
   return cart
     .map((item) => {
-      if (item.id === idProduct) return { ...item, count: item.count - 1 };
+      if (item.uuid === idProduct) return { ...item, count: item.count - 1 };
       return item;
     })
     .filter((item) => {
