@@ -1,18 +1,27 @@
 "use server";
-import { cookies } from "next/headers";
 
 import { confirmedPayment } from "../utils/notrixAction";
 import SuccessAlert from "../components/SuccessAlert";
 import FailedAlert from "../components/FailedAlert";
 
-export default async function Success() {
-  let confirmedPaymentBool = false;
+interface PostPaymentPageProps {
+  paymentRequestToken: string;
+}
 
-  const checkoutSessionCookie = cookies().get("checkoutSession");
-  if (checkoutSessionCookie !== undefined) {
-    const checkoutSession = JSON.parse(checkoutSessionCookie!.value);
-    confirmedPaymentBool = await confirmedPayment(checkoutSession);
-  }
+export async function generateStaticParams() {
+  return [
+    { paymentRequestToken: 'example-token' },
+  ];
+}
+
+export async function generateMetadata({ searchParams }: { searchParams: PostPaymentPageProps }) {
+  return {
+    title: 'Post Payment',
+  };
+}
+
+export default async function PostPayment({ searchParams }: { searchParams: PostPaymentPageProps }) {
+  const confirmedPaymentBool = await confirmedPayment(searchParams.paymentRequestToken);
 
   return (
     <div className="flex h-full flex-col items-center justify-center p-2">
