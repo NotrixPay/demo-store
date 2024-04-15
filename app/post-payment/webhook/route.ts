@@ -3,7 +3,12 @@ export async function POST(request: Request) {
     console.log(request.headers);
     console.log(await request.json());
 
-    // TODO: verify notrix header AND use Idiomatic header
+    if (request.headers.get("X-Notrix-Webhook-Key") != process.env.NOTRIX_WEBHOOK_KEY!){
+        // Unverified source - discard
+        return new Response("Unverified", {status: 401})
+    }
+
+    // TODO: Use Idiomatic header
 
     return new Response('Success!', {
         status: 200,
