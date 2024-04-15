@@ -1,5 +1,4 @@
 "use server";
-import { cookies } from "next/headers";
 import Client from "notrix";
 import { Product } from "./types";
 import { redirect } from "next/navigation";
@@ -12,6 +11,8 @@ export const notrixProcess = async (items: Product[]) => {
     items,
     "http://demo.notrix.io/post-payment",
     "http://demo.notrix.io",
+    "",
+    "https://demo.notrix.io/post-payment/webhook"
   );
 
   return redirect("https://notrix.io/pay/" + checkoutSession.paymentRequestToken);
